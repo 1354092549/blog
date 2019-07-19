@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>QIQI的世界</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://qiqiworld.tk/"/>
+  <updated>2019-07-19T13:01:42.087Z</updated>
+  <id>https://qiqiworld.tk/</id>
+  
+  <author>
+    <name>QIQI</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>前缀和优化技巧</title>
+    <link href="https://qiqiworld.tk/2019/07/19/%E5%89%8D%E7%BC%80%E5%92%8C%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/"/>
+    <id>https://qiqiworld.tk/2019/07/19/前缀和优化技巧/</id>
+    <published>2019-07-19T12:51:46.000Z</published>
+    <updated>2019-07-19T13:01:42.087Z</updated>
+    
+    <content type="html"><![CDATA[<p>对于一个 一维数组<code>C={i(0),i(1),i(2),...,i(j)}</code><br>若需要频繁的求<code>i(t)+i(t+1)+i(t+2)+...+i(k)</code>，其中0&lt;=t&lt;=k&lt;=j<br>可以维护一个前缀和数组<code>S</code>，使得<code>S[i]=i(0)+i(1)+i(2)+...+i(i)</code><br>此时求<code>i(t)+...+i(k)</code>的过程<br>当t&gt;=1，可用<code>S[k]-S[t-1]</code>代替<br>当t==0，可用<code>S[k]</code>代替</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;对于一个 一维数组&lt;code&gt;C={i(0),i(1),i(2),...,i(j)}&lt;/code&gt;&lt;br&gt;若需要频繁的求&lt;code&gt;i(t)+i(t+1)+i(t+2)+...+i(k)&lt;/code&gt;，其中0&amp;lt;=t&amp;lt;=k&amp;lt;=j&lt;br&gt;可以维护一个前缀和数组
+      
+    
+    </summary>
+    
+    
+      <category term="算法" scheme="https://qiqiworld.tk/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Intel Optane Error 0xA005004E</title>
+    <link href="https://qiqiworld.tk/2019/05/26/Intel-Optane-Error-0xA005004E/"/>
+    <id>https://qiqiworld.tk/2019/05/26/Intel-Optane-Error-0xA005004E/</id>
+    <published>2019-05-26T02:24:20.000Z</published>
+    <updated>2019-05-26T02:24:39.817Z</updated>
+    
+    <content type="html"><![CDATA[<p>当我多次试图启用Optane加速时（包括使用RST程序和Optane专用程序），反复得到错误0xA005004E的提示<br>查询Intel官网，无此错误代码的解释<br>更新RST操作系统层驱动无果<br>重新刷写UEFI固件更新RST底层驱动无果<br>最后发现是BitLocker的锅，把所有已经加密的驱动器解锁（不需要禁用BitLocker）即可</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;当我多次试图启用Optane加速时（包括使用RST程序和Optane专用程序），反复得到错误0xA005004E的提示&lt;br&gt;
+查询Intel官网，无此错误代码的解释&lt;br&gt;
+更新RST操作系统层驱动无果&lt;br&gt;
+重新刷写UEFI固件更新RST底层驱动无果&lt;br&gt;
+最后发现
+      
+    
+    </summary>
+    
+    
+      <category term="Optane" scheme="https://qiqiworld.tk/tags/Optane/"/>
+    
+      <category term="RST" scheme="https://qiqiworld.tk/tags/RST/"/>
+    
+      <category term="Intel" scheme="https://qiqiworld.tk/tags/Intel/"/>
+    
+      <category term="BitLocker" scheme="https://qiqiworld.tk/tags/BitLocker/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于易语言struct中的数组、传址</title>
+    <link href="https://qiqiworld.tk/2018/12/16/ArrayInStructOfEpl/"/>
+    <id>https://qiqiworld.tk/2018/12/16/ArrayInStructOfEpl/</id>
+    <published>2018-12-16T02:40:05.000Z</published>
+    <updated>2018-12-16T02:40:25.818Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li>易struct中的数组有别于C++中的数组，实际是个指向带下标等信息的数组结构的指针（<code>array_data*</code>）</li><li>易struct中的数组，不允许在声明时设定下标为0（运行可重定义）</li><li>在调用api时，为了使其他代码可以识别，易会转换生成一个中间struct进行（包括：不进行强制4字节对齐等），其中对于数组，<strong>转换时所依据的成员数信息 是 声明时提供的下标，而非 运行时数组结构中的成员数数据</strong>，因此此时 数组成员数 应保证大于等于 声明时提供的下标所计算出的成员数，否则会出现不可预料的后果（内存越界访问）</li><li>struct中的 传址 对数组（用<code>elem_type* array</code>代替<code>elem_type array[N]</code>）、数值型、用户自定义其他结构体类型均有效，但对 文本型 （均传递<code>char*</code>）、字节集（均传递<code>uint8_t*</code>） 无效</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ol&gt;
+&lt;li&gt;易struct中的数组有别于C++中的数组，实际是个指向带下标等信息的数组结构的指针（&lt;code&gt;array_data*&lt;/code&gt;）&lt;/li&gt;
+&lt;li&gt;易struct中的数组，不允许在声明时设定下标为0（运行可重定义）&lt;/li&gt;
+&lt;li&gt;在调用api时，为了
+      
+    
+    </summary>
+    
+    
+      <category term="易语言" scheme="https://qiqiworld.tk/tags/%E6%98%93%E8%AF%AD%E8%A8%80/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>推荐一款Gif录屏工具——GifCam</title>
+    <link href="https://qiqiworld.tk/2018/09/16/RecommendGifCam/"/>
+    <id>https://qiqiworld.tk/2018/09/16/RecommendGifCam/</id>
+    <published>2018-09-16T14:38:00.000Z</published>
+    <updated>2018-09-16T14:58:30.835Z</updated>
+    
+    <content type="html"><![CDATA[<p>官方网站是：<a href="http://blog.bahraniapps.com/gifcam/" target="_blank" rel="noopener">http://blog.bahraniapps.com/gifcam/</a><br>一共1.56M但是非常好用<br>生成的GIF非常小巧（组合模式，即省略各帧中的相同部分）<br>同时也支持简单的编辑</p><a id="more"></a><p>测试：</p><img src="/2018/09/16/RecommendGifCam/sample.gif"><p>下载：</p><a href="/2018/09/16/RecommendGifCam/GifCam%20V5.5.zip" title="GifCam V5.5.zip">GifCam V5.5.zip</a>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;官方网站是：&lt;a href=&quot;http://blog.bahraniapps.com/gifcam/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://blog.bahraniapps.com/gifcam/&lt;/a&gt;&lt;br&gt;
+一共1.56M但是非常好用&lt;br&gt;
+生成的GIF非常小巧（组合模式，即省略各帧中的相同部分）&lt;br&gt;
+同时也支持简单的编辑&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>[EIDEA应用平台]Windows SDK函数自动声明</title>
+    <link href="https://qiqiworld.tk/2018/08/30/EIDEA_WindowsSdkAi/"/>
+    <id>https://qiqiworld.tk/2018/08/30/EIDEA_WindowsSdkAi/</id>
+    <published>2018-08-30T04:46:29.000Z</published>
+    <updated>2018-09-16T14:58:11.495Z</updated>
+    
+    <content type="html"><![CDATA[<p>版本：V0.1 Preview<br>介绍：自动在适当时间添加Windows SDK函数/数据类型/常量的声明<br>平台：EIDEA应用平台<br>下载：<a href="/2018/08/30/EIDEA_WindowsSdkAi/WindowsSdkAi%20V0.1%20Preview.zip" title="WindowsSdkAi V0.1 Preview.zip">WindowsSdkAi V0.1 Preview.zip</a></p><p>因为懒得处理那堆支持库信息结构，所以没有写成支持库<br>没什么价值，纯粹研究下，类似产品早已满天飞了</p><p>QQ群：605310933<br>【请不要来这里反馈EIDEA本身的bug和其他插件的bug，因为我不是EIDEA和这些插件的作者】</p><a id="more"></a><p>演示（GIF动画）：</p><img src="/2018/08/30/EIDEA_WindowsSdkAi/demo.gif"><p>补充：<br>1、强行Hook实现，极可能触发暗桩，请谨慎使用<br>2、实在找不到能够触发暗桩的代码，麻烦出现问题时带上重现代码及操作步骤<br>3、需要源码的加群后单独问我要，一般会免费给予</p><p>附：EIDE助手下载：<a href="https://arae.cc/post/25762.html" target="_blank" rel="noopener">https://arae.cc/post/25762.html</a></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;版本：V0.1 Preview&lt;br&gt;
+介绍：自动在适当时间添加Windows SDK函数/数据类型/常量的声明&lt;br&gt;
+平台：EIDEA应用平台&lt;br&gt;
+下载：&lt;a href=&quot;/2018/08/30/EIDEA_WindowsSdkAi/WindowsSdkAi%20V0.1%20Preview.zip&quot; title=&quot;WindowsSdkAi V0.1 Preview.zip&quot;&gt;WindowsSdkAi V0.1 Preview.zip&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;因为懒得处理那堆支持库信息结构，所以没有写成支持库&lt;br&gt;
+没什么价值，纯粹研究下，类似产品早已满天飞了&lt;/p&gt;
+&lt;p&gt;QQ群：605310933&lt;br&gt;
+【请不要来这里反馈EIDEA本身的bug和其他插件的bug，因为我不是EIDEA和这些插件的作者】&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="易语言" scheme="https://qiqiworld.tk/tags/%E6%98%93%E8%AF%AD%E8%A8%80/"/>
+    
+      <category term="EIDEA" scheme="https://qiqiworld.tk/tags/EIDEA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WOW64Ext For EPL（纯易核心库+大量x86汇编及amd64汇编）</title>
+    <link href="https://qiqiworld.tk/2016/12/26/WOW64ExtForEPL/"/>
+    <id>https://qiqiworld.tk/2016/12/26/WOW64ExtForEPL/</id>
+    <published>2016-12-26T05:29:23.000Z</published>
+    <updated>2018-09-16T14:58:24.585Z</updated>
+    
+    <content type="html"><![CDATA[<p>基于WOW64Ext VC版（<a href="http://blog.rewolf.pl/blog/?p=1484" target="_blank" rel="noopener">http://blog.rewolf.pl/blog/?p=1484</a>）翻译制作</p><a id="more"></a><h1 id="下载"><a class="markdownIt-Anchor" href="#下载"></a> 下载</h1><a href="/2016/12/26/WOW64ExtForEPL/WOW64Ext%20For%20EPL%20V1.0.zip" title="WOW64Ext For EPL V1.0.zip">WOW64Ext For EPL V1.0.zip</a><h1 id="使用说明"><a class="markdownIt-Anchor" href="#使用说明"></a> 使用说明</h1><p>懒得写了…</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;基于WOW64Ext VC版（&lt;a href=&quot;http://blog.rewolf.pl/blog/?p=1484&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://blog.rewolf.pl/blog/?p=1484&lt;/a&gt;）翻译制作&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="易语言" scheme="https://qiqiworld.tk/tags/%E6%98%93%E8%AF%AD%E8%A8%80/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>AsmToECode 下载</title>
+    <link href="https://qiqiworld.tk/2016/05/06/AsmToECode/"/>
+    <id>https://qiqiworld.tk/2016/05/06/AsmToECode/</id>
+    <published>2016-05-06T07:25:33.000Z</published>
+    <updated>2018-09-16T14:58:00.635Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="下载"><a class="markdownIt-Anchor" href="#下载"></a> 下载</h1><a href="/2016/05/06/AsmToECode/AsmToECode%20V1.1.zip" title="AsmToECode V1.1.zip">AsmToECode V1.1.zip</a><h1 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h1><p>尽管<strong>易语言非常垃圾</strong><br>但有些时候还是必须得用的</p><p>1是将以前用易语言写的代码，用其他语言重写一遍，也是一件很麻烦的事情<br>2是某些特殊情况<br><strong>如果你不会易语言，我不建议你去学易语言</strong></p><p>易语言的限制太多，有些功能纯易很难完成或无法完成<br>且纯易代码的效率相对较慢，不适合某些要求高效率的场合</p><p>易语言有个特殊命令（库函数）叫 置入代码，可以直接提供 机器码<br>虽然此功能<strong>相比其他语言的内联汇编功能仍然存在很多限制</strong>，比如不能访问全局变量、不能调用其他子程序（函数）<br>但，至少可以解决一些易语言的不足</p><p>不过，这个命令要求提供的是 机器码，我们平时一般写的是人类可读的汇编代码</p><p>于是写了个工具，将汇编代码转换为机器码。</p><a id="more"></a><h1 id="汇编代码例程"><a class="markdownIt-Anchor" href="#汇编代码例程"></a> 汇编代码例程</h1><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; 软件特点：</span></span><br><span class="line"><span class="comment">; 1、支持使用@arg声明易语言定义的参数，使用@local声明易语言已定义的变量</span></span><br><span class="line"><span class="comment">; 2、支持显示错误行号</span></span><br><span class="line"><span class="comment">; 3、支持中文标识符</span></span><br><span class="line"><span class="comment">; 4、支持代码高亮</span></span><br><span class="line"><span class="comment">; 5、支持智能提示</span></span><br><span class="line"><span class="comment">; 6、支持宏、结构、联合体等高级masm功能</span></span><br><span class="line"><span class="comment">; 7、支持@ret伪指令（根据参数个数自动转换为retn N，并自动添加leave）</span></span><br><span class="line"><span class="comment">; 8、支持.if .while等高级伪指令</span></span><br><span class="line"><span class="comment">; 9、支持mmx指令集（需要添加.mmx伪指令）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">; 注意：</span></span><br><span class="line"><span class="comment">; 本软件在XP下使用MASM V10，在Win7或更高版本的操作系统上使用MASM V12</span></span><br><span class="line"><span class="comment">; 可能导致在XP下生成的机器码与Win7或更高版本的操作系统上生成的机器码不同</span></span><br><span class="line"><span class="comment">; 同时，我们也不推荐您使用XP系统，如果您使用XP系统，建议您尽快更新操作系统</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">; 实例代码：</span></span><br><span class="line"></span><br><span class="line">@arg arg1 <span class="comment">;定义在易语言子程序中定义的变量，名称可不同，顺序需相同</span></span><br><span class="line">@arg arg2:<span class="built_in">dword</span> <span class="comment">;dword为类型</span></span><br><span class="line">@local local1 <span class="comment">;定义已在易语言中声明的局部变量，顺序需相同</span></span><br><span class="line">local local2 <span class="comment">;定义未在易语言中声明的局部变量，需在所有 @local 伪指令之后定义</span></span><br><span class="line"><span class="keyword">mov</span> local2,<span class="number">1</span> <span class="comment">;local2 = 1</span></span><br><span class="line"><span class="keyword">mov</span> <span class="built_in">eax</span>,local2 <span class="comment">;eax寄存器 = local2</span></span><br><span class="line"><span class="keyword">add</span> <span class="built_in">eax</span>,local1 <span class="comment">;eax寄存器 = eax寄存器 + local1</span></span><br><span class="line"><span class="keyword">add</span> <span class="built_in">eax</span>,arg1 <span class="comment">;eax寄存器 = eax寄存器 + arg1</span></span><br><span class="line"><span class="keyword">add</span> <span class="built_in">eax</span>,arg2 <span class="comment">;eax寄存器 = eax寄存器 + arg2</span></span><br><span class="line"><span class="comment">;注：Win32下，返回值通过eax寄存器传递</span></span><br><span class="line"></span><br><span class="line">@<span class="keyword">ret</span></span><br><span class="line"><span class="comment">;本软件提供的返回伪指令（会自动根据参数个数转换为retn 8，并在此指令之前添加leave指令）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">;代码作用：返回（local2 + local1 + arg1 + arg2），其中局部变量local2在汇编中定义，并赋值为1。其他局部变量和参数均需要在易语言中定义</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;下载&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#下载&quot;&gt;&lt;/a&gt; 下载&lt;/h1&gt;
+&lt;a href=&quot;/2016/05/06/AsmToECode/AsmToECode%20V1.1.zip&quot; title=&quot;AsmToECode V1.1.zip&quot;&gt;AsmToECode V1.1.zip&lt;/a&gt;
+&lt;h1 id=&quot;介绍&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#介绍&quot;&gt;&lt;/a&gt; 介绍&lt;/h1&gt;
+&lt;p&gt;尽管&lt;strong&gt;易语言非常垃圾&lt;/strong&gt;&lt;br&gt;
+但有些时候还是必须得用的&lt;/p&gt;
+&lt;p&gt;1是将以前用易语言写的代码，用其他语言重写一遍，也是一件很麻烦的事情&lt;br&gt;
+2是某些特殊情况&lt;br&gt;
+&lt;strong&gt;如果你不会易语言，我不建议你去学易语言&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;易语言的限制太多，有些功能纯易很难完成或无法完成&lt;br&gt;
+且纯易代码的效率相对较慢，不适合某些要求高效率的场合&lt;/p&gt;
+&lt;p&gt;易语言有个特殊命令（库函数）叫 置入代码，可以直接提供 机器码&lt;br&gt;
+虽然此功能&lt;strong&gt;相比其他语言的内联汇编功能仍然存在很多限制&lt;/strong&gt;，比如不能访问全局变量、不能调用其他子程序（函数）&lt;br&gt;
+但，至少可以解决一些易语言的不足&lt;/p&gt;
+&lt;p&gt;不过，这个命令要求提供的是 机器码，我们平时一般写的是人类可读的汇编代码&lt;/p&gt;
+&lt;p&gt;于是写了个工具，将汇编代码转换为机器码。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="易语言" scheme="https://qiqiworld.tk/tags/%E6%98%93%E8%AF%AD%E8%A8%80/"/>
+    
+      <category term="汇编" scheme="https://qiqiworld.tk/tags/%E6%B1%87%E7%BC%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>强制忽略VisualStudio启动时提示的 安装错误</title>
+    <link href="https://qiqiworld.tk/2016/04/22/VisualStudio_IgnoreSetupErrors/"/>
+    <id>https://qiqiworld.tk/2016/04/22/VisualStudio_IgnoreSetupErrors/</id>
+    <published>2016-04-22T07:28:18.000Z</published>
+    <updated>2018-08-30T02:23:17.702Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>修复/修改操作未成功完成。请先修复 Visual Studio，然后再继续。可以继续运行 Visual Studio，但是操作可能不可靠。<br>是否继续运行 Visual Studio?</p></blockquote><p>或者</p><blockquote><p>安装操作未成功完成。请重新安装或修复 Visual Studio。</p></blockquote><p>如果你在Windows上运行VisualStudio时提示这些错误，请尝试：</p><a id="more"></a><p>打开注册表编辑器，定位到 <code>HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\14.0\Setup\vs\enterprise</code><br>这里的<code>14.0</code>为版本号，<code>enterprise</code>为版本类型。我这里用的是 <code>VisualStudio 2015 企业版</code><br><code>IsInstallInProgress</code> 改成<code>0</code>（没有请创建，类型：字符串，<code>REG_SZ</code>）<br><code>InstallResult</code> 改成<code>0</code>（没有请创建，类型：字符串，<code>REG_SZ</code>）</p><p>下面是从网上复制的表格</p><table><thead><tr><th style="text-align:left">年份版本号</th><th style="text-align:left">内部版本号</th></tr></thead><tbody><tr><td style="text-align:left">Visual Studio .NET 2002</td><td style="text-align:left">7.0</td></tr><tr><td style="text-align:left">Visual Studio .NET 2003</td><td style="text-align:left">7.1</td></tr><tr><td style="text-align:left">Visual Studio 2005</td><td style="text-align:left">8.0</td></tr><tr><td style="text-align:left">Visual Studio 2008</td><td style="text-align:left">9.0</td></tr><tr><td style="text-align:left">Visual Studio 2010</td><td style="text-align:left">10.0</td></tr><tr><td style="text-align:left">Visual Studio 2012</td><td style="text-align:left">11.0</td></tr><tr><td style="text-align:left">Visual Studio 2013</td><td style="text-align:left">12.0</td></tr><tr><td style="text-align:left">Visual Studio 2015</td><td style="text-align:left">14.0</td></tr></tbody></table><p><strong>注意：出现此类提示说明安装、使用VisualStudio的过程中损坏了文件，或在安装过程中取消安装某些组件导致。有些情况下跳过检查可以继续使用VisualStudio；但部分情况下，由于文件损坏，强制跳过检查继续运行也会导致VisualStudio崩溃</strong></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;修复/修改操作未成功完成。请先修复 Visual Studio，然后再继续。可以继续运行 Visual Studio，但是操作可能不可靠。&lt;br&gt;
+是否继续运行 Visual Studio?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;或者&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;安装操作未成功完成。请重新安装或修复 Visual Studio。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果你在Windows上运行VisualStudio时提示这些错误，请尝试：&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="VisualStudio" scheme="https://qiqiworld.tk/tags/VisualStudio/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>js html编码（需要jQuery）</title>
+    <link href="https://qiqiworld.tk/2016/04/02/jQueryHtmlEncode/"/>
+    <id>https://qiqiworld.tk/2016/04/02/jQueryHtmlEncode/</id>
+    <published>2016-04-02T07:14:44.000Z</published>
+    <updated>2016-04-28T10:42:45.587Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="说明"><a class="markdownIt-Anchor" href="#说明"></a> 说明</h1><p>换行符（CR/LF/CRLF）会被编码为<code>&lt;br /&gt;</code></p><a id="more"></a><h1 id="代码"><a class="markdownIt-Anchor" href="#代码"></a> 代码</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">$</span>)</span>&#123;</span><br><span class="line">    $.htmlEncode = <span class="function"><span class="keyword">function</span>(<span class="params">value</span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> $(<span class="string">'&lt;div /&gt;'</span>).text(value).html().replace(<span class="regexp">/\r\n?|\n/g</span>,<span class="string">"&lt;br /&gt;"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)(jQuery);</span><br></pre></td></tr></table></figure><h1 id="例程"><a class="markdownIt-Anchor" href="#例程"></a> 例程</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$.htmlEncode(<span class="string">"abc&amp;&lt;&gt;"</span>);</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;说明&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#说明&quot;&gt;&lt;/a&gt; 说明&lt;/h1&gt;
+&lt;p&gt;换行符（CR/LF/CRLF）会被编码为&lt;code&gt;&amp;lt;br /&amp;gt;&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="htmlEncode" scheme="https://qiqiworld.tk/tags/htmlEncode/"/>
+    
+      <category term="jQuery" scheme="https://qiqiworld.tk/tags/jQuery/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JSONArray 实现兼容老版本API的remove方法</title>
+    <link href="https://qiqiworld.tk/2016/04/02/AndroidJSONArrayRemove/"/>
+    <id>https://qiqiworld.tk/2016/04/02/AndroidJSONArrayRemove/</id>
+    <published>2016-04-02T07:12:32.000Z</published>
+    <updated>2016-04-28T10:43:07.662Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1><p>remove是在<strong>API level 19</strong>时加入的，在低版本调用时会出现错误。这里用反射实现了在低版本安卓上用的remove方法</p><a id="more"></a><h1 id="代码"><a class="markdownIt-Anchor" href="#代码"></a> 代码</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> JSONArray_删除(<span class="keyword">int</span> 索引, JSONArray JSONArray对象) <span class="keyword">throws</span> Exception&#123;</span><br><span class="line"><span class="keyword">if</span>(索引 &lt; <span class="number">0</span>)</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">Field valuesField=JSONArray.class.getDeclaredField(<span class="string">"values"</span>);</span><br><span class="line">valuesField.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">List&lt;Object&gt; values=(List&lt;Object&gt;)valuesField.get(JSONArray对象);</span><br><span class="line"><span class="keyword">if</span>(索引 &gt;= values.size())</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">values.remove(索引);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="建议"><a class="markdownIt-Anchor" href="#建议"></a> 建议</h1><p>真正使用时建议判断下API level，如果&gt;=19则调用新版本增加的remove，否则使用此方法</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;前言&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#前言&quot;&gt;&lt;/a&gt; 前言&lt;/h1&gt;
+&lt;p&gt;remove是在&lt;strong&gt;API level 19&lt;/strong&gt;时加入的，在低版本调用时会出现错误。这里用反射实现了在低版本安卓上用的remove方法&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="https://qiqiworld.tk/tags/Android/"/>
+    
+      <category term="JSONArray" scheme="https://qiqiworld.tk/tags/JSONArray/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android Emoji过滤</title>
+    <link href="https://qiqiworld.tk/2016/04/02/AndroidEmojiFilter/"/>
+    <id>https://qiqiworld.tk/2016/04/02/AndroidEmojiFilter/</id>
+    <published>2016-04-02T07:10:20.000Z</published>
+    <updated>2016-04-28T10:44:07.573Z</updated>
+    
+    <content type="html"><![CDATA[<p>上的基本都是Ctrl+C Ctrl+V，结果都有点问题，结合网上的资料，终于完成了Emoji过滤。</p><a id="more"></a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isNotEmojiCharacter</span><span class="params">(<span class="keyword">char</span> codePoint)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">return</span> (codePoint == <span class="number">0x0</span>) ||</span><br><span class="line">(codePoint == <span class="number">0x9</span>) ||</span><br><span class="line">(codePoint == <span class="number">0xA</span>) ||</span><br><span class="line">(codePoint == <span class="number">0xD</span>) ||</span><br><span class="line">((codePoint &gt;= <span class="number">0x20</span>) &amp;&amp; (codePoint &lt;= <span class="number">0xD7FF</span>)) ||</span><br><span class="line">((codePoint &gt;= <span class="number">0xE000</span>) &amp;&amp; (codePoint &lt;= <span class="number">0xFFFD</span>)) ||</span><br><span class="line">((codePoint &gt;= <span class="number">0x10000</span>) &amp;&amp; (codePoint &lt;= <span class="number">0x10FFFF</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 过滤emoji 或者 其他非文字类型的字符</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> source</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">filterEmoji</span><span class="params">(String source)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> len = source.length();</span><br><span class="line">StringBuilder buf = <span class="keyword">new</span> StringBuilder(len);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">char</span> codePoint = source.charAt(i);</span><br><span class="line"><span class="keyword">if</span> (isNotEmojiCharacter(codePoint))</span><br><span class="line">&#123;</span><br><span class="line">buf.append(codePoint);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> buf.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上的基本都是Ctrl+C Ctrl+V，结果都有点问题，结合网上的资料，终于完成了Emoji过滤。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="https://qiqiworld.tk/tags/Android/"/>
+    
+      <category term="Emoji表情" scheme="https://qiqiworld.tk/tags/Emoji%E8%A1%A8%E6%83%85/"/>
+    
+      <category term="Filter" scheme="https://qiqiworld.tk/tags/Filter/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hi</title>
+    <link href="https://qiqiworld.tk/2016/04/02/Hi/"/>
+    <id>https://qiqiworld.tk/2016/04/02/Hi/</id>
+    <published>2016-04-02T06:21:57.000Z</published>
+    <updated>2016-04-28T10:38:17.741Z</updated>
+    
+    <content type="html"><![CDATA[<p>大家好，我是QIQI，这是我的博客<br>Hi,I’m QIQI.<br>This is my blog.</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;大家好，我是QIQI，这是我的博客&lt;br&gt;
+Hi,I’m QIQI.&lt;br&gt;
+This is my blog.&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>
